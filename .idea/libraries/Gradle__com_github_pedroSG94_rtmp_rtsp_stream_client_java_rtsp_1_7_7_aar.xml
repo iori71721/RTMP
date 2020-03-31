@@ -1,0 +1,12 @@
+<component name="libraryTable">
+  <library name="Gradle: com.github.pedroSG94.rtmp-rtsp-stream-client-java:rtsp:1.7.7@aar">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/8c6ef1945de72bbb668aac35086aa795/jetified-rtsp-1.7.7/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/8c6ef1945de72bbb668aac35086aa795/jetified-rtsp-1.7.7/res" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.github.pedroSG94.rtmp-rtsp-stream-client-java/rtsp/1.7.7/cefb0ac7b57e6be237cb65256d35d5ab4e254dc7/rtsp-1.7.7-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

@@ -1,0 +1,3 @@
+rootProject.name='rmtp'
+include ':app'
+include ':rtmp'
