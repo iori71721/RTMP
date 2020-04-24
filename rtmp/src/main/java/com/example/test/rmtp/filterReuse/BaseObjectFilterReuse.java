@@ -1,9 +1,12 @@
 package com.example.test.rmtp.filterReuse;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.example.test.rmtp.filterReuse.record.ReuseBaseObjectFilterRecord;
 import com.pedro.encoder.input.gl.render.filters.BaseFilterRender;
+import com.pedro.encoder.input.gl.render.filters.object.BaseObjectFilterRender;
+import com.pedro.encoder.utils.gl.TranslateTo;
 import com.pedro.rtplibrary.rtmp.RtmpCamera2;
 
 /**
@@ -30,6 +33,36 @@ public abstract class BaseObjectFilterReuse<T extends BaseFilterRender,I extends
     }
 
     public abstract T generateFilter(I record);
+
+    void setScale(float scaleX, float scaleY) {
+        if(reusedFilter instanceof BaseObjectFilterRender){
+            BaseObjectFilterRender baseObjectFilterRender=(BaseObjectFilterRender)reusedFilter;
+
+            float xScalePercentage=filterRecord.getScale().x*scaleX;
+            float yScalePercentage=filterRecord.getScale().y*scaleY;
+            baseObjectFilterRender.setScale(xScalePercentage,yScalePercentage);
+            filterRecord.updateInformation(baseObjectFilterRender);
+        }
+    }
+
+    void setPosition(float x, float y) {
+        if(reusedFilter instanceof BaseObjectFilterRender){
+            BaseObjectFilterRender baseObjectFilterRender=(BaseObjectFilterRender)reusedFilter;
+            float xPercentage=x/filterRecord.getDefaultOutputSize().x*100;
+            float yPercentage=y/filterRecord.getDefaultOutputSize().y*100;
+
+            baseObjectFilterRender.setPosition(xPercentage,yPercentage);
+            filterRecord.updateInformation(baseObjectFilterRender);
+        }
+    }
+
+    void setPosition(TranslateTo positionTo) {
+        if(reusedFilter instanceof BaseObjectFilterRender){
+            BaseObjectFilterRender baseObjectFilterRender=(BaseObjectFilterRender)reusedFilter;
+            baseObjectFilterRender.setPosition(positionTo);
+            filterRecord.updateInformation(baseObjectFilterRender);
+        }
+    }
 
     @Override
     public int compareTo(BaseObjectFilterReuse o) {

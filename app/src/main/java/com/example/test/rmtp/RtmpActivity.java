@@ -4,16 +4,21 @@ import android.Manifest;
 import android.app.Activity;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
 import android.graphics.Point;
-import android.graphics.PointF;
 import android.hardware.Camera;
-import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.util.Log;
+import android.util.Size;
 import android.view.MotionEvent;
 import android.view.Surface;
 import android.view.SurfaceHolder;
+import android.view.TextureView;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.ViewParent;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -21,6 +26,9 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.camera.core.CameraX;
+import androidx.camera.core.Preview;
+import androidx.camera.core.PreviewConfig;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
@@ -35,12 +43,11 @@ import com.example.test.rmtp.filterReuse.record.ReuseImageObjectFilterRecord;
 import com.example.test.rmtp.filterReuse.record.ReuseNonUpdateFilterRecord;
 import com.pedro.encoder.input.gl.render.filters.AndroidViewFilterRender;
 import com.pedro.encoder.input.gl.render.filters.SnowFilterRender;
-import com.pedro.encoder.input.gl.render.filters.object.BaseObjectFilterRender;
-import com.pedro.encoder.input.gl.render.filters.object.ImageObjectFilterRender;
 import com.pedro.encoder.input.gl.render.filters.object.SurfaceFilterRender;
+import com.pedro.encoder.input.gl.render.filters.object.TextObjectFilterRender;
 import com.pedro.encoder.input.video.Camera1ApiManager;
-import com.pedro.encoder.input.video.Camera2ApiManager;
 import com.pedro.encoder.input.video.CameraHelper;
+import com.pedro.encoder.utils.gl.TranslateTo;
 import com.pedro.rtplibrary.rtmp.RtmpCamera2;
 import com.pedro.rtplibrary.view.OpenGlView;
 
@@ -49,12 +56,15 @@ import net.ossrs.rtmp.ConnectCheckerRtmp;
 import java.util.ArrayList;
 import java.util.List;
 
+import static androidx.camera.core.CameraX.getContext;
+
 public class RtmpActivity extends AppCompatActivity implements ConnectCheckerRtmp, SurfaceHolder.Callback
     , View.OnTouchListener {
     public static int REQUEST_CODE_PERMISSIONS=10;
 
     private OpenGlView surfaceView;
     private RtmpCamera2 rtmpCamera1;
+    private RtmpCamera2 onlyPreviewCamera;
 
     private int fixedRotation;
 
@@ -101,7 +111,7 @@ public class RtmpActivity extends AppCompatActivity implements ConnectCheckerRtm
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        Log.d("iori", "onCreate: 8");
+        Log.d("iori", "onCreate: 2");
         Toast.makeText(this,"preview width "+preViewWidth+" height "+preViewHeight,Toast.LENGTH_LONG).show();
         setContentView(R.layout.activity_rmtp);
 
@@ -143,10 +153,10 @@ public class RtmpActivity extends AppCompatActivity implements ConnectCheckerRtm
                 Log.d("iori", "onClick: fixedRotation "+fixedRotation);
                 Log.d("iori", "onClick: surfaceView "+surfaceView.getWidth()+" height "+surfaceView.getHeight());
                 Log.d("iori_FilterReusedManager_update", "onClick: will start stream update filter info");
-                filterReusedManager.updateFilterInfos();
                 if (rtmpCamera1.prepareAudio() && rtmpCamera1.prepareVideo(streamHeight, streamWidth, 24, 1200 * 1024, false, fixedRotation)) {
                     rtmpCamera1.startStream(url);
                     filterReusedManager.reusedFiltersByAddIndex();
+                    filterReusedManager.resetOperateFilter();
                 } else {
                     /**This device cant init encoders, this could be for 2 reasons: The encoder selected doesnt support any configuration setted or your device hasnt a H264 or AAC encoder (in this case you can see log error valid encoder not found)*/
                 }
@@ -217,7 +227,6 @@ public class RtmpActivity extends AppCompatActivity implements ConnectCheckerRtm
                 list_friend.setVisibility(View.VISIBLE);
                 list_friend.setMinimumHeight(600);
                 addAndroidView(list_friend,FilterName.LIST_FRIEND);
-
                 list_friend.setX(0);
                 list_friend.setY(0);
                 int fixy=-1;
@@ -229,6 +238,13 @@ public class RtmpActivity extends AppCompatActivity implements ConnectCheckerRtm
         initFriendList();
 //        will do camera in surface
 //        initCameraSurface();
+//        start_stream.post(new Runnable() {
+//            @Override
+//            public void run() {
+//                setupPreviewCamerainCamerax();
+//            }
+//        });
+
 
     }
 
@@ -242,6 +258,7 @@ public class RtmpActivity extends AppCompatActivity implements ConnectCheckerRtm
 //        surfaceFilterRender.setScale(50f, 33.3f);
 //        spriteGestureController.setBaseObjectFilterRender(surfaceFilterRender); //Optional
 
+
         cameraRender=new SurfaceFilterRender(new SurfaceFilterRender.SurfaceReadyCallback(){
 
             @Override
@@ -249,17 +266,125 @@ public class RtmpActivity extends AppCompatActivity implements ConnectCheckerRtm
                 Camera1ApiManager camera1ApiManager =
                         new Camera1ApiManager(cameraRender.getSurfaceTexture(), getApplicationContext());
                 camera1ApiManager.start(CameraHelper.Facing.FRONT, 640, 480, 30);
-
-
-//                Camera2ApiManager camera2ApiManager=new Camera2ApiManager()
-
             }
         });
 
-        cameraRender.setScale(50f,33.3f);
+        cameraRender.getSurface();
+
+//        Camera1ApiManager camera1ApiManager =
+//                new Camera1ApiManager(cameraRender.getSurfaceTexture(), getApplicationContext());
+//        camera1ApiManager.start(CameraHelper.Facing.FRONT, 640, 480, 30);
+
+
+
+
+//        new Handler().postDelayed(new Runnable() {
+//            @Override
+//            public void run() {
+//                Camera1ApiManager camera1ApiManager =
+//                        new Camera1ApiManager(cameraRender.getSurfaceTexture(), getApplicationContext());
+//                camera1ApiManager.start(CameraHelper.Facing.BACK, 640, 480, 30);
+//            }
+//        }, 3000);
+
+
+
+
+//        cameraRender.setScale(50f,33.3f);
+        cameraRender.setScale(30f,20f);
         cameraRender.setPosition(0,0);
         NonFilterReuse<SurfaceFilterRender> cameraFilterReuse=new NonFilterReuse<>(new ReuseNonUpdateFilterRecord(),SurfaceFilterRender.class);
         filterReusedManager.addFilter(cameraFilterReuse,FilterName.CAMERA_SURFACE);
+    }
+
+    private TextureView viewFinder;
+
+    private void updateTransform(){
+
+        Matrix matrix = new Matrix();
+
+//        val matrix = Matrix()
+
+        // Compute the center of the view finder
+        float centerX=viewFinder.getWidth()/2f;
+        float centerY=viewFinder.getHeight()/2f;
+
+//        val centerX = viewFinder.width / 2f
+//        val centerY = viewFinder.height / 2f
+
+        // Correct preview output to account for display rotation
+        int rotationDegress =-999;
+        switch (viewFinder.getDisplay().getRotation()) {
+            case Surface.ROTATION_0:
+                rotationDegress = 0;
+                break;
+            case Surface.ROTATION_90:
+                rotationDegress = 90;
+                break;
+            case Surface.ROTATION_180:
+                rotationDegress = 180;
+                break;
+            case Surface.ROTATION_270:
+                rotationDegress = 270;
+                break;
+        }
+        matrix.postRotate(new Float(-rotationDegress),centerX,centerY);
+
+
+        /*val rotationDegrees = when(viewFinder.display.rotation) {
+            Surface.ROTATION_0 -> 0
+            Surface.ROTATION_90 -> 90
+            Surface.ROTATION_180 -> 180
+            Surface.ROTATION_270 -> 270
+        else -> return
+        }
+        matrix.postRotate(-rotationDegrees.toFloat(), centerX, centerY)*/
+
+
+
+
+        // Finally, apply transformations to our TextureView
+        viewFinder.setTransform(matrix);
+
+
+    }
+
+    private void setupPreviewCamerainCamerax(){
+//        viewFinder=findViewById(R.id.view_finder);
+        viewFinder.bringToFront();
+        cameraRender=new SurfaceFilterRender();
+        final PreviewConfig previewConfig=new PreviewConfig.Builder().setTargetResolution(new Size(600,480))
+                .setLensFacing(CameraX.LensFacing.BACK)
+                .build();
+
+
+        /*val previewConfig = PreviewConfig.Builder().apply {
+            setTargetResolution(Size(640, 480))
+        }.build()*/
+
+
+        // Build the viewfinder use case
+
+        final Preview preview=new Preview(previewConfig);
+
+        // Every time the viewfinder is updated, recompute layout
+        preview.setOnPreviewOutputUpdateListener(new Preview.OnPreviewOutputUpdateListener() {
+            @Override
+            public void onUpdated(@NonNull Preview.PreviewOutput output) {
+                ViewParent parent=viewFinder.getParent();
+                if(parent instanceof ViewGroup){
+                    ViewGroup parentGroup=(ViewGroup)parent;
+                    parentGroup.removeView(viewFinder);
+                    parentGroup.addView(viewFinder,0);
+                    viewFinder.setSurfaceTexture(output.getSurfaceTexture());
+                    updateTransform();
+                }
+            }
+        });
+
+//        viewFinder=cameraRender.getSurfaceTexture();
+        CameraX.bindToLifecycle(this,preview);
+
     }
 
     private void setupFriendListFilterPosition(float x,float y){
@@ -307,7 +432,7 @@ public class RtmpActivity extends AppCompatActivity implements ConnectCheckerRtm
             addAndroidView(fly_button,FilterName.FLY_BUTTON);
             final AndroidViewFilterReuse androidViewFilterReuse=(AndroidViewFilterReuse)filterReusedManager.fetchFilter(FilterName.FLY_BUTTON);
             float fixY=-2f;
-            androidViewFilterReuse.setPosition(androidViewFilterReuse.getReusedFilter(),fly_button.getX(),fly_button.getY()+fixY);
+            filterReusedManager.setPosition(FilterName.FLY_BUTTON,fly_button.getX(),fly_button.getY()+fixY);
             fly_button.setOnTouchListener(new View.OnTouchListener() {
                 @Override
                 public boolean onTouch(View v, MotionEvent event) {
@@ -325,7 +450,7 @@ public class RtmpActivity extends AppCompatActivity implements ConnectCheckerRtm
 
     private void moveButton(){
         final AndroidViewFilterReuse androidViewFilterReuse=(AndroidViewFilterReuse)filterReusedManager.fetchFilter(FilterName.FLY_BUTTON);
-        androidViewFilterReuse.setPosition(androidViewFilterReuse.getReusedFilter(),fly_button.getX(),fly_button.getY());
+        filterReusedManager.setPosition(FilterName.FLY_BUTTON,fly_button.getX(),fly_button.getY());
         fly_button.postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -338,7 +463,7 @@ public class RtmpActivity extends AppCompatActivity implements ConnectCheckerRtm
                         fly_button.setY(fly_button.getY()+moveStep);
 //                        fly_button.setTranslationY(moveStep);
                         Log.d("iori_move", "after move fly button y"+fly_button.getY());
-                        androidViewFilterReuse.setPosition(androidViewFilterReuse.getReusedFilter(),fly_button.getX(),fly_button.getY());
+                        filterReusedManager.setPosition(FilterName.FLY_BUTTON,fly_button.getX(),fly_button.getY());
                         Log.d("iori_move", "run: fly button x"+fly_button.getX()+" y "+fly_button.getY()+" open gl button x "+androidViewFilterReuse.getFilterRecord().getPosition().x+" y "+androidViewFilterReuse.getFilterRecord().getPosition().y);
                         moveCount--;
                         if(moveCount > 0) {
@@ -366,6 +491,14 @@ public class RtmpActivity extends AppCompatActivity implements ConnectCheckerRtm
             addFilter.getFilterRecord().setAttatchView(view);
             add_adnroid_button.setText(add_adnroid_button.getText());
             filterReusedManager.addFilter(addFilter,FilterName.ADD_ANDROID_VIEW);
+
+            filterReusedManager.setPosition(FilterName.ADD_ANDROID_VIEW,200,200);
+            filterReusedManager.setPosition(FilterName.ADD_ANDROID_VIEW,400,400);
+            filterReusedManager.setPosition(FilterName.ADD_ANDROID_VIEW,TranslateTo.CENTER);
+//
+            filterReusedManager.setScale(FilterName.ADD_ANDROID_VIEW,1f,1f);
+//            filterReusedManager.setScale(FilterName.ADD_ANDROID_VIEW,2f,2f);
+//            filterReusedManager.setScale(FilterName.ADD_ANDROID_VIEW,3f,3f);
         }
     }
 
@@ -408,15 +541,27 @@ public class RtmpActivity extends AppCompatActivity implements ConnectCheckerRtm
             image1_visible_setup.setVisibility(View.VISIBLE);
             image1_visible_setup.setText(image1_visible_setup.getText()+" false ");
 
+            filterReusedManager.setPosition(FilterName.ADD_IMAGE_BUTTON1,300,300);
+            filterReusedManager.setPosition(FilterName.ADD_IMAGE_BUTTON1,400,400);
+            filterReusedManager.setPosition(FilterName.ADD_IMAGE_BUTTON1,TranslateTo.CENTER);
+
+            filterReusedManager.setScale(FilterName.ADD_IMAGE_BUTTON1,1f,1f);
+            filterReusedManager.setScale(FilterName.ADD_IMAGE_BUTTON1,2f,2f);
+            filterReusedManager.setScale(FilterName.ADD_IMAGE_BUTTON1,3f,3f);
         }
     }
 
     private void setImageToStream2() {
         if(filterReusedManager.fetchFilter(FilterName.ADD_IMAGE_BUTTON2) == null){
             ReuseImageObjectFilterRecord addRecord=new ReuseImageObjectFilterRecord();
-            addRecord.setResID(R.drawable.rtmp_icon);
             addRecord.setDefaultOutputSize(new Point(streamWidth,streamHeight));
-            ImageFilterReuse addFilterReuse=new ImageFilterReuse(addRecord);
+            ImageFilterReuse addFilterReuse=new ImageFilterReuse(addRecord, ImageFilterReuse.LoadImageType.BTIMAP, new ImageFilterReuse.LoadBitmapBehavior() {
+                @Override
+                public Bitmap loadBitmap() {
+                    Bitmap createBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.start_stream);
+                    return createBitmap;
+                }
+            });
             addFilterReuse.init(this);
             filterReusedManager.addFilter(addFilterReuse,FilterName.ADD_IMAGE_BUTTON2);
         }

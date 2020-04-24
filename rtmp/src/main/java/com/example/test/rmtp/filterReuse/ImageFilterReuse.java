@@ -23,9 +23,16 @@ import java.lang.annotation.RetentionPolicy;
 public class ImageFilterReuse extends BaseObjectFilterReuse<ImageObjectFilterRender, ReuseImageObjectFilterRecord> {
     private @LoadImageType.EnumRange
     int loadImageType = LoadImageType.RESOURCE;
+    private LoadBitmapBehavior loadBitmapBehavior;
 
     public ImageFilterReuse(ReuseImageObjectFilterRecord record) {
         super(record);
+    }
+
+    public ImageFilterReuse(ReuseImageObjectFilterRecord record, @LoadImageType.EnumRange int loadImageType,LoadBitmapBehavior loadBitmapBehavior) {
+        this(record);
+        this.loadImageType=loadImageType;
+        this.loadBitmapBehavior=loadBitmapBehavior;
     }
 
     public void init(Context context){
@@ -50,6 +57,11 @@ public class ImageFilterReuse extends BaseObjectFilterReuse<ImageObjectFilterRen
             case LoadImageType.RESOURCE:
                 if(getContext() != null) {
                     createBitmap = BitmapFactory.decodeResource(getContext().getResources(), record.getResID());
+                }
+                break;
+            case LoadImageType.BTIMAP:
+                if(loadBitmapBehavior != null) {
+                    createBitmap=loadBitmapBehavior.loadBitmap();
                 }
                 break;
             default:
@@ -106,10 +118,11 @@ public class ImageFilterReuse extends BaseObjectFilterReuse<ImageObjectFilterRen
         this.loadImageType = loadImageType;
     }
 
-    private static class LoadImageType {
-        private static final int RESOURCE=1;
+    public static class LoadImageType {
+        public static final int RESOURCE=1;
+        public static final int BTIMAP=2;
 
-        @IntDef({RESOURCE})
+        @IntDef({RESOURCE,BTIMAP})
         @Retention(RetentionPolicy.SOURCE)
         public @interface EnumRange {}
     }
@@ -118,5 +131,9 @@ public class ImageFilterReuse extends BaseObjectFilterReuse<ImageObjectFilterRen
         public NonSupportLoadImageException() {
             super("non support load type");
         }
+    }
+
+    public static interface LoadBitmapBehavior{
+        Bitmap loadBitmap();
     }
 }

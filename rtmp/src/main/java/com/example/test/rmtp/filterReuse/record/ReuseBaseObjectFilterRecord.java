@@ -31,6 +31,10 @@ public abstract class ReuseBaseObjectFilterRecord implements Comparable{
      */
     private final boolean canUpdate;
 
+    private boolean gestureMove=true;
+
+    private boolean gestureScale=true;
+
     public ReuseBaseObjectFilterRecord() {
         this(true);
     }
@@ -106,5 +110,21 @@ public abstract class ReuseBaseObjectFilterRecord implements Comparable{
 
     public void setReuseIndex(int reuseIndex) {
         this.reuseIndex = reuseIndex;
+    }
+
+    public boolean isGestureMove() {
+        return gestureMove;
+    }
+
+    public void setGestureMove(boolean gestureMove) {
+        this.gestureMove = gestureMove;
+    }
+
+    public boolean isGestureScale() {
+        return gestureScale;
+    }
+
+    public void setGestureScale(boolean gestureScale) {
+        this.gestureScale = gestureScale;
     }
 }

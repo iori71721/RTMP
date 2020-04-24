@@ -19,6 +19,8 @@ public class AndroidViewFilterReuse extends BaseObjectFilterReuse<AndroidViewFil
 
     public AndroidViewFilterReuse(ReuseAndroidViewFilterRecord record) {
         super(record);
+        getFilterRecord().setGestureMove(false);
+        getFilterRecord().setGestureScale(false);
     }
 
     @Override
@@ -67,13 +69,29 @@ public class AndroidViewFilterReuse extends BaseObjectFilterReuse<AndroidViewFil
         getFilterRecord().setScale(new PointF(1,1));
     }
 
+
+    @Override
+    void setScale(float scaleX, float scaleY) {
+        scaleAttachViewAndSetupRecord(getReusedFilter(),scaleX,scaleY);
+    }
+
+    @Override
+    void setPosition(float x, float y) {
+        setPosition(getReusedFilter(),x,y);
+    }
+
+    @Override
+    void setPosition(TranslateTo positionTo) {
+        setPosition(getReusedFilter(),positionTo);
+    }
+
     /**
      * lib setPosition is inferior,so refactor it
      * @param setupRender
      * @param x
      * @param y
      */
-    public void setPosition(AndroidViewFilterRender setupRender,float x,float y){
+    void setPosition(AndroidViewFilterRender setupRender, float x, float y){
         Field positionX, positionY;
         try {
             positionX=setupRender.getClass().getDeclaredField("positionX");
@@ -95,7 +113,7 @@ public class AndroidViewFilterReuse extends BaseObjectFilterReuse<AndroidViewFil
      * @param setupRender
      * @param positionTo
      */
-    public void setPosition(AndroidViewFilterRender setupRender,TranslateTo positionTo){
+    void setPosition(AndroidViewFilterRender setupRender, TranslateTo positionTo){
         int previewX = getFilterRecord().getDefaultOutputSize().x;
         int previewY = getFilterRecord().getDefaultOutputSize().y;
         int viewX=getFilterRecord().getAttatchView().getWidth();

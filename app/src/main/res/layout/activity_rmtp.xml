@@ -5,16 +5,63 @@
     android:layout_width="match_parent"
     android:orientation="vertical">
 
-    <com.pedro.rtplibrary.view.OpenGlView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/surfaceView"
-        app:keepAspectRatio="false"
-        app:AAEnabled="false"
-        app:numFilters="30"
-        app:isFlipHorizontal="false"
-        app:isFlipVertical="false"
-        />
+
+
+
+
+<!--    <TextureView-->
+<!--        android:id="@+id/view_finder"-->
+<!--        android:layout_width="800px"-->
+<!--        android:layout_height="800px"-->
+<!--        app:layout_constraintTop_toTopOf="parent"-->
+<!--        app:layout_constraintBottom_toBottomOf="parent"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintEnd_toEndOf="parent" />-->
+
+
+<!--    <FrameLayout-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="match_parent" >-->
+
+<!--        <com.pedro.rtplibrary.view.OpenGlView-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="match_parent"-->
+<!--            android:id="@+id/surfaceView"-->
+<!--            app:keepAspectRatio="false"-->
+<!--            app:AAEnabled="false"-->
+<!--            app:numFilters="30"-->
+<!--            app:isFlipHorizontal="false"-->
+<!--            app:isFlipVertical="false"-->
+<!--            />-->
+
+<!--        <TextureView-->
+<!--            android:id="@+id/view_finder"-->
+<!--            android:layout_width="800px"-->
+<!--            android:layout_height="900px"-->
+<!--            app:layout_constraintTop_toTopOf="parent"-->
+<!--            app:layout_constraintBottom_toBottomOf="parent"-->
+<!--            app:layout_constraintStart_toStartOf="parent"-->
+<!--            app:layout_constraintEnd_toEndOf="parent" />-->
+
+
+
+<!--    </FrameLayout>-->
+
+
+
+
+        <com.pedro.rtplibrary.view.OpenGlView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/surfaceView"
+            app:keepAspectRatio="false"
+            app:AAEnabled="false"
+            app:numFilters="30"
+            app:isFlipHorizontal="false"
+            app:isFlipVertical="false"
+            />
+
+
 
 
     <LinearLayout

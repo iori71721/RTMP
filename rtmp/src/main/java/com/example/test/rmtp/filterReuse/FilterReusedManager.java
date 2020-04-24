@@ -4,11 +4,13 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
+import com.example.test.rmtp.filterReuse.record.ReuseBaseObjectFilterRecord;
 import com.example.test.rmtp.refactor.FixSpriteGestureController;
 import com.pedro.encoder.input.gl.SpriteGestureController;
 import com.pedro.encoder.input.gl.render.filters.BaseFilterRender;
 import com.pedro.encoder.input.gl.render.filters.NoFilterRender;
 import com.pedro.encoder.input.gl.render.filters.object.BaseObjectFilterRender;
+import com.pedro.encoder.utils.gl.TranslateTo;
 import com.pedro.rtplibrary.rtmp.RtmpCamera2;
 
 import java.util.ArrayList;
@@ -37,6 +39,8 @@ public class FilterReusedManager {
 
     private final SpriteGestureController spriteGestureController = new FixSpriteGestureController();
 
+    private String currentRenderKey;
+
     public void init(RtmpCamera2 attachCamera){
         this.attachCamera=attachCamera;
     }
@@ -50,7 +54,7 @@ public class FilterReusedManager {
                 addFilterReuse.setIdentifyKey(addKey);
                 BaseFilterRender addRender=addFilterReuse.generateFilter(addFilterReuse.getFilterRecord());
                 addFilterReuse.attachCameraAndRender(attachCamera,addRender,addIndex);
-                attachSpriteGestureController(addRender);
+                attachSpriteGestureController(addRender, addKey);
                 Log.i(TAG, "addFilter: key "+addKey+" add index "+addIndex+" name "+addFilterReuse.getIdentifyKey());
             }else{
                 Log.i(TAG, "addFilter: repeat key "+addKey+" name "+addFilterReuse.getIdentifyKey());
@@ -59,10 +63,11 @@ public class FilterReusedManager {
         return addIndex;
     }
 
-    private void attachSpriteGestureController(BaseFilterRender attachRender){
+    private void attachSpriteGestureController(BaseFilterRender attachRender, String currentRenderKey){
         if(attachRender instanceof BaseObjectFilterRender){
             spriteGestureController.setBaseObjectFilterRender((BaseObjectFilterRender)attachRender);
             spriteGestureController.setPreventMoveOutside(false);
+            this.currentRenderKey=currentRenderKey;
         }
     }
 
@@ -107,6 +112,7 @@ public class FilterReusedManager {
 //                replace original key
                 reusedFilters.put(replaceKey,deprecatedFilter);
                 reusedFilters.remove(key);
+                deprecatedFilter.release();
             }
         }
         return deprecatedFilter;
@@ -124,17 +130,6 @@ public class FilterReusedManager {
             updatFilter=reusedFilters.get(key);
             if(updatFilter != null){
                 updatFilter.getFilterRecord().updateInformation(updatFilter.getReusedFilter());
-            }
-        }
-    }
-
-    public void updateFilterInfos(){
-        synchronized (reusedFilters){
-            for(String updateFilterKey:reusedFilters.keySet()){
-                if(reusedFilters.get(updateFilterKey).isVisible()) {
-//                    lib will reset filter info when filter is disattached camera,so only setup info when filter is attached camera
-                    updateFilterInfo(updateFilterKey);
-                }
             }
         }
     }
@@ -198,7 +193,7 @@ public class FilterReusedManager {
                 if (filterReuse.getReusedFilter() instanceof BaseObjectFilterRender) {
                     if (filterReuse.canOperate()) {
                         filterRender = (BaseObjectFilterRender) filterReuse.getReusedFilter();
-                        attachSpriteGestureController(filterRender);
+                        attachSpriteGestureController(filterRender, filterKey);
                         if (spriteGestureController.spriteTouched(v, event)) {
                             touchFilter = filterRender;
                             break;
@@ -213,14 +208,53 @@ public class FilterReusedManager {
     public boolean dispatchOnTouch(View v, MotionEvent event){
         BaseObjectFilterRender matchFilter=fetchOnTouchFilter(v,event);
         if(matchFilter != null) {
-            attachSpriteGestureController(matchFilter);
+            attachSpriteGestureController(matchFilter, currentRenderKey);
+            ReuseBaseObjectFilterRecord matchFilterRecord=fetchFilter(currentRenderKey).getFilterRecord();
             if (spriteGestureController.spriteTouched(v, event)) {
-                spriteGestureController.moveSprite(v, event);
-                spriteGestureController.scaleSprite(event);
+                if(matchFilterRecord.isGestureMove()) {
+                    spriteGestureController.moveSprite(v, event);
+                    updateFilterInfo(currentRenderKey);
+                }
+                if(matchFilterRecord.isGestureScale()) {
+                    spriteGestureController.scaleSprite(event);
+                    updateFilterInfo(currentRenderKey);
+                }
                 return true;
             }
         }
         return false;
+    }
+
+    /**
+     *
+     * @param filterKey
+     * @param scaleX setup 1.1 equals original width * 1.1
+     * @param scaleY
+     */
+    public void setScale(String filterKey,float scaleX, float scaleY) {
+        BaseObjectFilterReuse baseObjectFilterReuse=fetchFilter(filterKey);
+        if(baseObjectFilterReuse != null){
+            baseObjectFilterReuse.setScale(scaleX,scaleY);
+        }
+    }
+
+    public void setPosition(String filterKey,float x, float y) {
+        BaseObjectFilterReuse baseObjectFilterReuse=fetchFilter(filterKey);
+        if(baseObjectFilterReuse != null){
+            baseObjectFilterReuse.setPosition(x,y);
+        }
+    }
+
+    public void setPosition(String filterKey,TranslateTo positionTo) {
+        BaseObjectFilterReuse baseObjectFilterReuse=fetchFilter(filterKey);
+        if(baseObjectFilterReuse != null){
+            baseObjectFilterReuse.setPosition(positionTo);
+        }
+    }
+
+    public void resetOperateFilter(){
+        currentRenderKey="";
+        spriteGestureController.setBaseObjectFilterRender(null);
     }
 
     public void destory(){
