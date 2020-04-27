@@ -11,16 +11,7 @@
     <option name="TOOL_WINDOW_CONFIGURED_FILTER" value="Show only selected application" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="b3da5fee-fd98-41d8-87d7-2fd4fff41772" name="Default Changelist" comment="1.物件可設定是否手勢移動與縮放&#10;2.確認物件可透過外部設定座標與大小與縮放以及TranslateTo.CENTER 設定方式，需透過manager設定才會有紀錄&#10;3.filter 丟棄，釋放資源&#10;4.手勢操作完，立即更新資訊，避免遺失&#10;5.ImageFilter 可載入bitmap">
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_camera_camera_camera2_1_0_0_alpha06_aar.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_camera_camera_core_1_0_0_alpha06_aar.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_concurrent_concurrent_futures_1_0_0_alpha03_jar.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_exifinterface_exifinterface_1_0_0_aar.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__com_google_auto_value_auto_value_annotations_1_6_3_jar.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__com_google_guava_listenablefuture_1_0_jar.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/src/main/java/org/yanzi/camera/CameraInterface.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/src/main/java/org/yanzi/camera/preview/CameraGLSurfaceView.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/src/main/java/org/yanzi/camera/preview/DirectDrawer.java" afterDir="false" />
+    <list default="true" id="b3da5fee-fd98-41d8-87d7-2fd4fff41772" name="Default Changelist" comment="version 1.1.1&#10;1.物件可設定是否手勢移動與縮放&#10;2.確認物件可透過外部設定座標與大小與縮放以及TranslateTo.CENTER 設定方式，需透過manager設定才會有紀錄&#10;3.filter 丟棄，釋放資源&#10;4.手勢操作完，立即更新資訊，避免遺失&#10;5.ImageFilter 可載入bitmap">
       <change beforePath="$PROJECT_DIR$/.gradle/5.6.4/executionHistory/executionHistory.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/5.6.4/executionHistory/executionHistory.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/5.6.4/executionHistory/executionHistory.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/5.6.4/executionHistory/executionHistory.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/5.6.4/fileHashes/fileHashes.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/5.6.4/fileHashes/fileHashes.bin" afterDir="false" />
@@ -33,22 +24,10 @@
       <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/outputFiles.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/outputFiles.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/caches/build_file_checksums.ser" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/caches/build_file_checksums.ser" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_arch_core_core_runtime_2_0_0_aar.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_arch_core_core_runtime_2_1_0_aar.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_lifecycle_lifecycle_livedata_2_0_0_aar.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_lifecycle_lifecycle_livedata_2_1_0_aar.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_lifecycle_lifecycle_livedata_core_2_0_0_aar.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_lifecycle_lifecycle_livedata_core_2_1_0_aar.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/app.iml" beforeDir="false" afterPath="$PROJECT_DIR$/app/app.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/app/build.gradle" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/test/rmtp/RtmpActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/test/rmtp/RtmpActivity.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/activity_rmtp.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/activity_rmtp.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rtmp/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/rtmp/build.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rtmp/rtmp.iml" beforeDir="false" afterPath="$PROJECT_DIR$/rtmp/rtmp.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rtmp/src/main/java/com/example/test/rmtp/filterReuse/AndroidViewFilterReuse.java" beforeDir="false" afterPath="$PROJECT_DIR$/rtmp/src/main/java/com/example/test/rmtp/filterReuse/AndroidViewFilterReuse.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rtmp/src/main/java/com/example/test/rmtp/filterReuse/BaseObjectFilterReuse.java" beforeDir="false" afterPath="$PROJECT_DIR$/rtmp/src/main/java/com/example/test/rmtp/filterReuse/BaseObjectFilterReuse.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rtmp/src/main/java/com/example/test/rmtp/filterReuse/FilterReusedManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/rtmp/src/main/java/com/example/test/rmtp/filterReuse/FilterReusedManager.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/rtmp/src/main/java/com/example/test/rmtp/filterReuse/ImageFilterReuse.java" beforeDir="false" afterPath="$PROJECT_DIR$/rtmp/src/main/java/com/example/test/rmtp/filterReuse/ImageFilterReuse.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rtmp/src/main/java/com/example/test/rmtp/filterReuse/record/ReuseBaseObjectFilterRecord.java" beforeDir="false" afterPath="$PROJECT_DIR$/rtmp/src/main/java/com/example/test/rmtp/filterReuse/record/ReuseBaseObjectFilterRecord.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rtmp/src/main/java/com/example/test/rmtp/filterReuse/record/ReuseImageObjectFilterRecord.java" beforeDir="false" afterPath="$PROJECT_DIR$/rtmp/src/main/java/com/example/test/rmtp/filterReuse/record/NonReleaseObjectFilterRecord.java" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -56,7 +35,7 @@
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
-  <component name="ExecutionTargetManager" SELECTED_TARGET="PDAGAA4881700806" />
+  <component name="ExecutionTargetManager" SELECTED_TARGET="192.168.0.174:5555" />
   <component name="ExternalProjectsData">
     <projectState path="$PROJECT_DIR$">
       <ProjectState />
@@ -211,7 +190,14 @@
       <option name="project" value="LOCAL" />
       <updated>1585635061746</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="version 1.1.1&#10;1.物件可設定是否手勢移動與縮放&#10;2.確認物件可透過外部設定座標與大小與縮放以及TranslateTo.CENTER 設定方式，需透過manager設定才會有紀錄&#10;3.filter 丟棄，釋放資源&#10;4.手勢操作完，立即更新資訊，避免遺失&#10;5.ImageFilter 可載入bitmap">
+      <created>1587736867098</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1587736867098</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -229,14 +215,15 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="init version 1.1.0&#10;1.can add more filter and control" />
-    <option name="LAST_COMMIT_MESSAGE" value="init version 1.1.0&#10;1.can add more filter and control" />
+    <MESSAGE value="version 1.1.1&#10;1.物件可設定是否手勢移動與縮放&#10;2.確認物件可透過外部設定座標與大小與縮放以及TranslateTo.CENTER 設定方式，需透過manager設定才會有紀錄&#10;3.filter 丟棄，釋放資源&#10;4.手勢操作完，立即更新資訊，避免遺失&#10;5.ImageFilter 可載入bitmap" />
+    <option name="LAST_COMMIT_MESSAGE" value="version 1.1.1&#10;1.物件可設定是否手勢移動與縮放&#10;2.確認物件可透過外部設定座標與大小與縮放以及TranslateTo.CENTER 設定方式，需透過manager設定才會有紀錄&#10;3.filter 丟棄，釋放資源&#10;4.手勢操作完，立即更新資訊，避免遺失&#10;5.ImageFilter 可載入bitmap" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/app/src/main/java/com/example/test/rmtp/RtmpActivity.java</url>
-          <line>159</line>
+          <line>156</line>
           <option name="timeStamp" value="1" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">

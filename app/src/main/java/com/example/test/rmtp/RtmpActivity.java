@@ -39,12 +39,11 @@ import com.example.test.rmtp.filterReuse.FilterReusedManager;
 import com.example.test.rmtp.filterReuse.ImageFilterReuse;
 import com.example.test.rmtp.filterReuse.NonFilterReuse;
 import com.example.test.rmtp.filterReuse.record.ReuseAndroidViewFilterRecord;
-import com.example.test.rmtp.filterReuse.record.ReuseImageObjectFilterRecord;
+import com.example.test.rmtp.filterReuse.record.NonReleaseObjectFilterRecord;
 import com.example.test.rmtp.filterReuse.record.ReuseNonUpdateFilterRecord;
 import com.pedro.encoder.input.gl.render.filters.AndroidViewFilterRender;
 import com.pedro.encoder.input.gl.render.filters.SnowFilterRender;
 import com.pedro.encoder.input.gl.render.filters.object.SurfaceFilterRender;
-import com.pedro.encoder.input.gl.render.filters.object.TextObjectFilterRender;
 import com.pedro.encoder.input.video.Camera1ApiManager;
 import com.pedro.encoder.input.video.CameraHelper;
 import com.pedro.encoder.utils.gl.TranslateTo;
@@ -55,8 +54,6 @@ import net.ossrs.rtmp.ConnectCheckerRtmp;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import static androidx.camera.core.CameraX.getContext;
 
 public class RtmpActivity extends AppCompatActivity implements ConnectCheckerRtmp, SurfaceHolder.Callback
     , View.OnTouchListener {
@@ -531,11 +528,22 @@ public class RtmpActivity extends AppCompatActivity implements ConnectCheckerRtm
     }
 
     private void setImageToStream() {
+        final int outWidth=100;
+        final int outHeight=100;
         if(filterReusedManager.fetchFilter(FilterName.ADD_IMAGE_BUTTON1) == null){
-            ReuseImageObjectFilterRecord addRecord=new ReuseImageObjectFilterRecord();
-            addRecord.setResID(R.drawable.rtmp_icon);
+            NonReleaseObjectFilterRecord addRecord=new NonReleaseObjectFilterRecord();
             addRecord.setDefaultOutputSize(new Point(streamWidth,streamHeight));
-            ImageFilterReuse addFilterReuse=new ImageFilterReuse(addRecord);
+            final ImageFilterReuse addFilterReuse=new ImageFilterReuse(addRecord, new ImageFilterReuse.LoadBitmapBehavior() {
+                @Override
+                public Bitmap loadBitmap() {
+                    BitmapFactory.Options options=new BitmapFactory.Options();
+                    options.outWidth=outWidth;
+                    options.outHeight=outHeight;
+
+                    Bitmap createBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.start_stream);
+                    return createBitmap;
+                }
+            });
             addFilterReuse.init(this);
             filterReusedManager.addFilter(addFilterReuse,FilterName.ADD_IMAGE_BUTTON1);
             image1_visible_setup.setVisibility(View.VISIBLE);
@@ -546,16 +554,14 @@ public class RtmpActivity extends AppCompatActivity implements ConnectCheckerRtm
             filterReusedManager.setPosition(FilterName.ADD_IMAGE_BUTTON1,TranslateTo.CENTER);
 
             filterReusedManager.setScale(FilterName.ADD_IMAGE_BUTTON1,1f,1f);
-            filterReusedManager.setScale(FilterName.ADD_IMAGE_BUTTON1,2f,2f);
-            filterReusedManager.setScale(FilterName.ADD_IMAGE_BUTTON1,3f,3f);
         }
     }
 
     private void setImageToStream2() {
         if(filterReusedManager.fetchFilter(FilterName.ADD_IMAGE_BUTTON2) == null){
-            ReuseImageObjectFilterRecord addRecord=new ReuseImageObjectFilterRecord();
+            NonReleaseObjectFilterRecord addRecord=new NonReleaseObjectFilterRecord();
             addRecord.setDefaultOutputSize(new Point(streamWidth,streamHeight));
-            ImageFilterReuse addFilterReuse=new ImageFilterReuse(addRecord, ImageFilterReuse.LoadImageType.BTIMAP, new ImageFilterReuse.LoadBitmapBehavior() {
+            ImageFilterReuse addFilterReuse=new ImageFilterReuse(addRecord, new ImageFilterReuse.LoadBitmapBehavior() {
                 @Override
                 public Bitmap loadBitmap() {
                     Bitmap createBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.start_stream);

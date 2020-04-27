@@ -2,36 +2,21 @@ package com.example.test.rmtp.filterReuse;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.util.Log;
 
-import androidx.annotation.IntDef;
-
-import com.example.test.rmtp.filterReuse.record.ReuseImageObjectFilterRecord;
+import com.example.test.rmtp.filterReuse.record.NonReleaseObjectFilterRecord;
 import com.pedro.encoder.input.gl.render.filters.object.ImageObjectFilterRender;
-import com.pedro.encoder.utils.gl.TranslateTo;
 import com.pedro.rtplibrary.rtmp.RtmpCamera2;
-
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
 
 /**
  * usage
  * 1.setup record info
  * 2.reuse
  */
-public class ImageFilterReuse extends BaseObjectFilterReuse<ImageObjectFilterRender, ReuseImageObjectFilterRecord> {
-    private @LoadImageType.EnumRange
-    int loadImageType = LoadImageType.RESOURCE;
+public class ImageFilterReuse extends BaseObjectFilterReuse<ImageObjectFilterRender, NonReleaseObjectFilterRecord> {
     private LoadBitmapBehavior loadBitmapBehavior;
 
-    public ImageFilterReuse(ReuseImageObjectFilterRecord record) {
+    public ImageFilterReuse(NonReleaseObjectFilterRecord record, LoadBitmapBehavior loadBitmapBehavior) {
         super(record);
-    }
-
-    public ImageFilterReuse(ReuseImageObjectFilterRecord record, @LoadImageType.EnumRange int loadImageType,LoadBitmapBehavior loadBitmapBehavior) {
-        this(record);
-        this.loadImageType=loadImageType;
         this.loadBitmapBehavior=loadBitmapBehavior;
     }
 
@@ -40,52 +25,25 @@ public class ImageFilterReuse extends BaseObjectFilterReuse<ImageObjectFilterRen
     }
 
     @Override
-    public ImageObjectFilterRender generateFilter(ReuseImageObjectFilterRecord record) {
+    public ImageObjectFilterRender generateFilter(NonReleaseObjectFilterRecord record) {
         ImageObjectFilterRender generateFilter=new ImageObjectFilterRender();
-        loadImageAndSetupRecord(getLoadImageType(),generateFilter,record);
+        loadImage(generateFilter);
         generateFilter.setDefaultScale(record.getDefaultOutputSize().x,record.getDefaultOutputSize().y);
-
-        float xScale=generateFilter.getScale().x;
-        float yScale=generateFilter.getScale().y;
-        generateFilter.setPosition(TranslateTo.CENTER);
+        generateFilter.setPosition(record.getPosition().x,record.getPosition().y);
         return generateFilter;
     }
 
-    private Bitmap createBitmap(@LoadImageType.EnumRange int loadType, ReuseImageObjectFilterRecord record){
+    private Bitmap createBitmap(LoadBitmapBehavior loadBitmapBehavior){
         Bitmap createBitmap=null;
-        switch (loadType){
-            case LoadImageType.RESOURCE:
-                if(getContext() != null) {
-                    createBitmap = BitmapFactory.decodeResource(getContext().getResources(), record.getResID());
-                }
-                break;
-            case LoadImageType.BTIMAP:
-                if(loadBitmapBehavior != null) {
-                    createBitmap=loadBitmapBehavior.loadBitmap();
-                }
-                break;
-            default:
-                throw new NonSupportLoadImageException();
+        if(loadBitmapBehavior != null) {
+            createBitmap= loadBitmapBehavior.loadBitmap();
         }
         return createBitmap;
     }
 
-    private void setupRecord(@LoadImageType.EnumRange int loadType, ReuseImageObjectFilterRecord record){
-//        setup before info
-        int beforeResID=record.getResID();
-
-        record.clearLoadInfo();
-        switch (loadType) {
-            case LoadImageType.RESOURCE:
-                record.setResID(beforeResID);
-                break;
-        }
-    }
-
-    private Bitmap loadImageAndSetupRecord(@LoadImageType.EnumRange int loadType,ImageObjectFilterRender setupRender, ReuseImageObjectFilterRecord record){
-        Bitmap createBitmap=createBitmap(loadType,record);
+    private Bitmap loadImage(ImageObjectFilterRender setupRender){
+        Bitmap createBitmap=createBitmap(loadBitmapBehavior);
         loadImageToImageFilterRender(setupRender,createBitmap);
-        setupRecord(loadType,record);
         return createBitmap;
     }
 
@@ -93,44 +51,20 @@ public class ImageFilterReuse extends BaseObjectFilterReuse<ImageObjectFilterRen
         setupRender.setImage(loadBitmap);
     }
 
-    public Bitmap loadImageByResourceAndSetupRecord(int resID){
-        getFilterRecord().setResID(resID);
-        Bitmap loadBitmap=loadImageAndSetupRecord(LoadImageType.RESOURCE,getReusedFilter(),getFilterRecord());
-           return loadBitmap;
+    public void changeImage(LoadBitmapBehavior loadBitmapBehavior){
+        this.loadBitmapBehavior=loadBitmapBehavior;
+        Bitmap createBitmap = loadBitmapBehavior.loadBitmap();
+        getReusedFilter().setImage(createBitmap);
     }
 
     @Override
     public void reuse(RtmpCamera2 attachCamera) {
 //        because filter will be released when start stream,so create new
         setReusedFilter(new ImageObjectFilterRender());
-        loadImageAndSetupRecord(getLoadImageType(),getReusedFilter(),getFilterRecord());
+        loadImage(getReusedFilter());
         getReusedFilter().setScale(getFilterRecord().getScale().x,getFilterRecord().getScale().y);
         getReusedFilter().setPosition(getFilterRecord().getPosition().x,getFilterRecord().getPosition().y);
         attachCameraAndRender(attachCamera,getReusedFilter(),getFilterRecord().getReuseIndex());
-    }
-
-    public @LoadImageType.EnumRange
-    int getLoadImageType() {
-        return loadImageType;
-    }
-
-    private void setLoadImageType(@LoadImageType.EnumRange int loadImageType) {
-        this.loadImageType = loadImageType;
-    }
-
-    public static class LoadImageType {
-        public static final int RESOURCE=1;
-        public static final int BTIMAP=2;
-
-        @IntDef({RESOURCE,BTIMAP})
-        @Retention(RetentionPolicy.SOURCE)
-        public @interface EnumRange {}
-    }
-
-    public static class NonSupportLoadImageException extends RuntimeException{
-        public NonSupportLoadImageException() {
-            super("non support load type");
-        }
     }
 
     public static interface LoadBitmapBehavior{
