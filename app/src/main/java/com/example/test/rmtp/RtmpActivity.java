@@ -552,8 +552,6 @@ public class RtmpActivity extends AppCompatActivity implements ConnectCheckerRtm
             filterReusedManager.setPosition(FilterName.ADD_IMAGE_BUTTON1,300,300);
             filterReusedManager.setPosition(FilterName.ADD_IMAGE_BUTTON1,400,400);
             filterReusedManager.setPosition(FilterName.ADD_IMAGE_BUTTON1,TranslateTo.CENTER);
-
-            filterReusedManager.setScale(FilterName.ADD_IMAGE_BUTTON1,1f,1f);
         }
     }
 

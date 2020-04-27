@@ -2,6 +2,8 @@ package com.example.test.rmtp.filterReuse;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.PointF;
+import android.util.Log;
 
 import com.example.test.rmtp.filterReuse.record.NonReleaseObjectFilterRecord;
 import com.pedro.encoder.input.gl.render.filters.object.ImageObjectFilterRender;
@@ -29,6 +31,7 @@ public class ImageFilterReuse extends BaseObjectFilterReuse<ImageObjectFilterRen
         ImageObjectFilterRender generateFilter=new ImageObjectFilterRender();
         loadImage(generateFilter);
         generateFilter.setDefaultScale(record.getDefaultOutputSize().x,record.getDefaultOutputSize().y);
+        record.setScale(new PointF(generateFilter.getScale().x,generateFilter.getScale().y));
         generateFilter.setPosition(record.getPosition().x,record.getPosition().y);
         return generateFilter;
     }
