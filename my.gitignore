@@ -1,7 +1,7 @@
 *.iml
 app/*.iml
 rmtp/rtmp/*.iml
-.gradle/
-.idea/
-rmtp/.gradle/
-rmtp/.idea/
+.gradle
+.idea
+rmtp/.gradle
+rmtp/.idea
