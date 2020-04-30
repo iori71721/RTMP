@@ -6,7 +6,7 @@ public class ReuseNonUpdateFilterRecord extends ReuseBaseObjectFilterRecord {
         this(false);
     }
 
-    public ReuseNonUpdateFilterRecord(boolean canUpdate) {
+    private ReuseNonUpdateFilterRecord(boolean canUpdate) {
         super(false);
     }
 

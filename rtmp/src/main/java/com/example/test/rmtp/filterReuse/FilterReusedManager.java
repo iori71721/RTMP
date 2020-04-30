@@ -55,6 +55,7 @@ public class FilterReusedManager {
                 BaseFilterRender addRender=addFilterReuse.generateFilter(addFilterReuse.getFilterRecord());
                 addFilterReuse.attachCameraAndRender(attachCamera,addRender,addIndex);
                 attachSpriteGestureController(addRender, addKey);
+                resetOperateFilter();
                 Log.i(TAG, "addFilter: key "+addKey+" add index "+addIndex+" name "+addFilterReuse.getIdentifyKey());
             }else{
                 Log.i(TAG, "addFilter: repeat key "+addKey+" name "+addFilterReuse.getIdentifyKey());

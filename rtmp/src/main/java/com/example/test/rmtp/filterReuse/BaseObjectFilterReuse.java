@@ -27,6 +27,7 @@ public abstract class BaseObjectFilterReuse<T extends BaseFilterRender,I extends
     private String identifyKey="";
     private boolean deprecated;
     private boolean visible=true;
+    protected RtmpCamera2 attachCamera;
 
     public BaseObjectFilterReuse(I record) {
         this.filterRecord = record;
@@ -81,6 +82,7 @@ public abstract class BaseObjectFilterReuse<T extends BaseFilterRender,I extends
 
     public void attachCameraAndRender(RtmpCamera2 attachCamera, T attachFilter, int attachIndex){
         attachCamera.getGlInterface().setFilter(attachIndex,attachFilter);
+        this.attachCamera=attachCamera;
         reusedFilter=attachFilter;
         filterRecord.setAddIndex(attachIndex);
         filterRecord.setReuseIndex(attachIndex);

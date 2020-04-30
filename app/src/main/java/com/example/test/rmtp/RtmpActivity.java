@@ -6,6 +6,7 @@ import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Point;
 import android.hardware.Camera;
@@ -38,9 +39,11 @@ import com.example.test.rmtp.filterReuse.BaseObjectFilterReuse;
 import com.example.test.rmtp.filterReuse.FilterReusedManager;
 import com.example.test.rmtp.filterReuse.ImageFilterReuse;
 import com.example.test.rmtp.filterReuse.NonFilterReuse;
+import com.example.test.rmtp.filterReuse.TextFilterReuse;
 import com.example.test.rmtp.filterReuse.record.ReuseAndroidViewFilterRecord;
 import com.example.test.rmtp.filterReuse.record.NonReleaseObjectFilterRecord;
 import com.example.test.rmtp.filterReuse.record.ReuseNonUpdateFilterRecord;
+import com.example.test.rmtp.filterReuse.record.ReuseTextFilterRecord;
 import com.pedro.encoder.input.gl.render.filters.AndroidViewFilterRender;
 import com.pedro.encoder.input.gl.render.filters.SnowFilterRender;
 import com.pedro.encoder.input.gl.render.filters.object.SurfaceFilterRender;
@@ -88,6 +91,8 @@ public class RtmpActivity extends AppCompatActivity implements ConnectCheckerRtm
     private Button add_fly_button;
     private Button fly_button;
 
+    private Button add_text;
+
     private final FilterReusedManager filterReusedManager=new FilterReusedManager();
 
     private final String[] PERMISSIONS = {
@@ -108,7 +113,7 @@ public class RtmpActivity extends AppCompatActivity implements ConnectCheckerRtm
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        Log.d("iori", "onCreate: 2");
+        Log.d("iori", "onCreate: 3");
         Toast.makeText(this,"preview width "+preViewWidth+" height "+preViewHeight,Toast.LENGTH_LONG).show();
         setContentView(R.layout.activity_rmtp);
 
@@ -124,6 +129,7 @@ public class RtmpActivity extends AppCompatActivity implements ConnectCheckerRtm
         fly_button=findViewById(R.id.fly_button);
         list_friend=findViewById(R.id.list_friend);
         show_friends=findViewById(R.id.show_friends);
+        add_text=findViewById(R.id.add_text);
 
         surfaceView.getHolder().addCallback(this);
         surfaceView.setOnTouchListener(this);
@@ -231,6 +237,7 @@ public class RtmpActivity extends AppCompatActivity implements ConnectCheckerRtm
                 setupFriendListFilterPosition(50,0+fixy);
             }
         });
+        handleAddText();
 
         initFriendList();
 //        will do camera in surface
@@ -241,8 +248,25 @@ public class RtmpActivity extends AppCompatActivity implements ConnectCheckerRtm
 //                setupPreviewCamerainCamerax();
 //            }
 //        });
+    }
 
-
+    private void handleAddText(){
+        add_text.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(filterReusedManager.fetchFilter(FilterName.ADD_TEXT) == null){
+                    ReuseTextFilterRecord textFilterRecord=new ReuseTextFilterRecord();
+                    textFilterRecord.setDefaultOutputSize(new Point(streamWidth,streamHeight));
+                    TextFilterReuse textFilterReuse=new TextFilterReuse(textFilterRecord);
+                    filterReusedManager.addFilter(textFilterReuse,FilterName.ADD_TEXT);
+                    textFilterReuse.setText("happy1");
+                    textFilterReuse.setTextSize(100);
+                    textFilterReuse.setTextColor(Color.GREEN);
+                    filterReusedManager.setPosition(FilterName.ADD_TEXT,100,100);
+                    filterReusedManager.setScale(FilterName.ADD_TEXT,1f,1f);
+                }
+            }
+        });
     }
 
     private void initCameraSurface(){
@@ -709,6 +733,7 @@ public class RtmpActivity extends AppCompatActivity implements ConnectCheckerRtm
         private static final String FLY_BUTTON ="fly_button";
         private static final String LIST_FRIEND="list_friend";
         private static final String CAMERA_SURFACE="CAMERA_SURFACE";
+        private static final String ADD_TEXT="ADD_TEXT";
     }
 
 }
