@@ -83,15 +83,17 @@ public class FilterReusedManager {
         synchronized (reusedFilters){
             setupFilter=reusedFilters.get(key);
                 if(setupFilter != null){
-                    setupFilter.setVisible(visible);
-                    if(visible){
-                        setupFilter.reuse(attachCamera);
-                    }else{
-                        updateFilterInfo(key);
-                        attachCamera.getGlInterface().setFilter(setupFilter.getFilterRecord().getReuseIndex(),new NoFilterRender());
-                        disattachSpriteGestureController(setupFilter.getReusedFilter());
-                        if(setupFilter.getReusedFilter() instanceof BaseObjectFilterRender) {
-                            BaseObjectFilterRender setupRender=(BaseObjectFilterRender)setupFilter.getReusedFilter();
+                    if(setupFilter.isVisible() != visible) {
+                        setupFilter.setVisible(visible);
+                        if (visible) {
+                            setupFilter.reuse(attachCamera);
+                        } else {
+                            updateFilterInfo(key);
+                            attachCamera.getGlInterface().setFilter(setupFilter.getFilterRecord().getReuseIndex(), new NoFilterRender());
+                            disattachSpriteGestureController(setupFilter.getReusedFilter());
+                            if (setupFilter.getReusedFilter() instanceof BaseObjectFilterRender) {
+                                BaseObjectFilterRender setupRender = (BaseObjectFilterRender) setupFilter.getReusedFilter();
+                            }
                         }
                     }
                 }
