@@ -1,7 +1,6 @@
 package com.example.test.rmtp.filterReuse;
 
 import android.content.Context;
-import android.util.Log;
 
 import com.example.test.rmtp.filterReuse.record.ReuseBaseObjectFilterRecord;
 import com.pedro.encoder.input.gl.render.filters.BaseFilterRender;
@@ -42,7 +41,7 @@ public abstract class BaseObjectFilterReuse<T extends BaseFilterRender,I extends
             float xScalePercentage=filterRecord.getScale().x*scaleX;
             float yScalePercentage=filterRecord.getScale().y*scaleY;
             baseObjectFilterRender.setScale(xScalePercentage,yScalePercentage);
-            filterRecord.updateInformation(baseObjectFilterRender);
+            filterRecord.updateInformation(baseObjectFilterRender, visible);
         }
     }
 
@@ -53,7 +52,7 @@ public abstract class BaseObjectFilterReuse<T extends BaseFilterRender,I extends
             float yPercentage=y/filterRecord.getDefaultOutputSize().y*100;
 
             baseObjectFilterRender.setPosition(xPercentage,yPercentage);
-            filterRecord.updateInformation(baseObjectFilterRender);
+            filterRecord.updateInformation(baseObjectFilterRender, visible);
         }
     }
 
@@ -61,7 +60,7 @@ public abstract class BaseObjectFilterReuse<T extends BaseFilterRender,I extends
         if(reusedFilter instanceof BaseObjectFilterRender){
             BaseObjectFilterRender baseObjectFilterRender=(BaseObjectFilterRender)reusedFilter;
             baseObjectFilterRender.setPosition(positionTo);
-            filterRecord.updateInformation(baseObjectFilterRender);
+            filterRecord.updateInformation(baseObjectFilterRender, visible);
         }
     }
 

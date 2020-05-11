@@ -61,8 +61,8 @@ public abstract class ReuseBaseObjectFilterRecord implements Comparable{
         return result;
     }
 
-    public void updateInformation(BaseFilterRender updateRender){
-        if(!canUpdate || !(updateRender instanceof BaseObjectFilterRender)){
+    public void updateInformation(BaseFilterRender updateRender, boolean visible){
+        if(!canUpdate || !(updateRender instanceof BaseObjectFilterRender) || !visible){
             return;
         }
         BaseObjectFilterRender updateObjectRender=(BaseObjectFilterRender)updateRender;

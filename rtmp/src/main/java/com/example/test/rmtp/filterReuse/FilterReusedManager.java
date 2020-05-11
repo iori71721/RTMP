@@ -132,7 +132,7 @@ public class FilterReusedManager {
         synchronized (reusedFilters){
             updatFilter=reusedFilters.get(key);
             if(updatFilter != null){
-                updatFilter.getFilterRecord().updateInformation(updatFilter.getReusedFilter());
+                updatFilter.getFilterRecord().updateInformation(updatFilter.getReusedFilter(), updatFilter.isVisible());
             }
         }
     }

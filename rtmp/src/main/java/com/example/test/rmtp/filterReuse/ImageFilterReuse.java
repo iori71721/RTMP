@@ -51,13 +51,15 @@ public class ImageFilterReuse extends BaseObjectFilterReuse<ImageObjectFilterRen
     }
 
     private void loadImageToImageFilterRender(ImageObjectFilterRender setupRender,Bitmap loadBitmap){
-        setupRender.setImage(loadBitmap);
+        if(isVisible()) {
+            setupRender.setImage(loadBitmap);
+        }
     }
 
     public void changeImage(LoadBitmapBehavior loadBitmapBehavior){
         this.loadBitmapBehavior=loadBitmapBehavior;
         Bitmap createBitmap = loadBitmapBehavior.loadBitmap();
-        getReusedFilter().setImage(createBitmap);
+        loadImageToImageFilterRender(getReusedFilter(),createBitmap);
     }
 
     @Override
