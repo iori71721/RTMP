@@ -60,6 +60,11 @@ public abstract class BaseObjectFilterReuse<T extends BaseFilterRender,I extends
         if(reusedFilter instanceof BaseObjectFilterRender){
             BaseObjectFilterRender baseObjectFilterRender=(BaseObjectFilterRender)reusedFilter;
             baseObjectFilterRender.setPosition(positionTo);
+            if(positionTo == TranslateTo.CENTER){
+//                fix lib bug
+                float fixY=50f - baseObjectFilterRender.getScale().y / 2f;
+                baseObjectFilterRender.setPosition(baseObjectFilterRender.getPosition().x,fixY);
+            }
             filterRecord.updateInformation(baseObjectFilterRender, visible);
         }
     }

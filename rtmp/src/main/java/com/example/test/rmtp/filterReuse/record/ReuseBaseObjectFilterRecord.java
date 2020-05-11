@@ -12,6 +12,9 @@ import com.pedro.encoder.input.gl.render.filters.object.BaseObjectFilterRender;
  */
 public abstract class ReuseBaseObjectFilterRecord implements Comparable{
     protected PointF position=new PointF(0,0);
+
+    public static final float DEFAULT_SCALE=100;
+
     /**
      * x is width scale ,y is height scale,x 100 is full preview width
      */
