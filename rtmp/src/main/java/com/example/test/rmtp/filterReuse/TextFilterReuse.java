@@ -69,8 +69,9 @@ public class TextFilterReuse extends BaseObjectFilterReuse<TextObjectFilterRende
         getFilterRecord().textSize=textSize;
         getFilterRecord().textColor=textColor;
         getFilterRecord().typeface=typeface;
-        setupText(getReusedFilter(),getFilterRecord());
-        getFilterRecord().updateInformation(getReusedFilter(),isVisible());
+        if(isVisible()) {
+            setupText(getReusedFilter(), getFilterRecord());
+        }
     }
 
     @Override
