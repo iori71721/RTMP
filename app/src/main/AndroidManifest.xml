@@ -38,6 +38,9 @@
             android:screenOrientation="portrait" />
         <activity android:name="com.example.test.gpuimage.GpuImageActivity" />
 
+        <activity android:name=".filter.HorizontalFlipActivity"
+            android:screenOrientation="portrait" />
+
         <service android:name=".service.StreamService" />
     </application>
 

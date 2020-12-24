@@ -138,7 +138,7 @@ public class RtmpActivity extends AppCompatActivity implements ConnectCheckerRtm
 //        autosetupPreViewSize(usedCameraID);
 
         final String fbRmtpServer="rtmps://live-api-s.facebook.com:443/rtmp/";
-        final String streamID="122127136062836?s_bl=1&s_ps=1&s_sw=0&s_vt=api-s&a=Abyqk4b7aMH_bWnH";
+        final String streamID="106631727788299?s_bl=1&s_ps=1&s_psm=1&s_sw=0&s_vt=api-s&a=Abxqgg7u0LOy8Kpx";
         final String url=fbRmtpServer+streamID;
 
 // Request camera permissions
