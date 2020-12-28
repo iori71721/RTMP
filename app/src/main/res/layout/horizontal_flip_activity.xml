@@ -62,6 +62,30 @@
                     android:layout_height="wrap_content"
                     android:text="水平翻轉off" />
 
+                <Button
+                    android:id="@+id/button_Brightness_on"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="亮度開" />
+
+                <Button
+                    android:id="@+id/button_Brightness_off"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="亮度關" />
+
+                <Button
+                    android:id="@+id/button_Brightness_inc"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="亮度+" />
+
+                <Button
+                    android:id="@+id/button_Brightness_dec"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="亮度-" />
+
             </LinearLayout>
 
         </ScrollView>
