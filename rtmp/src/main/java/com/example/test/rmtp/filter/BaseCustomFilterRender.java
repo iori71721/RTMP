@@ -27,7 +27,7 @@ public abstract class BaseCustomFilterRender extends BaseFilterRender {
         baseInit();
     }
 
-    protected final void baseInit(){
+    protected void baseInit(){
         Matrix.setIdentityM(MVPMatrix, 0);
         Matrix.setIdentityM(STMatrix, 0);
         squareVertex = ByteBuffer.allocateDirect(squareVertexDataFilter.length * FLOAT_SIZE_BYTES)
@@ -50,7 +50,7 @@ public abstract class BaseCustomFilterRender extends BaseFilterRender {
 
     protected abstract String generateFragmentShader(Context context);
 
-    protected final void baseInitGl(Context context){
+    protected void baseInitGl(Context context){
         vertexShader= generateVertexShader(context);
         fragmentShader=generateFragmentShader(context);
         program = GlUtil.createProgram(vertexShader, fragmentShader);
@@ -61,7 +61,7 @@ public abstract class BaseCustomFilterRender extends BaseFilterRender {
         uSamplerHandle = GLES20.glGetUniformLocation(program, "uSampler");
     }
 
-    protected final void baseDrawFilter(){
+    protected void baseDrawFilter(){
         GLES20.glUseProgram(program);
 
         squareVertex.position(SQUARE_VERTEX_DATA_POS_OFFSET);
@@ -79,7 +79,7 @@ public abstract class BaseCustomFilterRender extends BaseFilterRender {
         GLES20.glUniformMatrix4fv(uSTMatrixHandle, 1, false, STMatrix, 0);
     }
 
-    protected final void bindBaseTexture(){
+    protected void bindBaseTexture(){
         GLES20.glUniform1i(uSamplerHandle, 4);
         GLES20.glActiveTexture(GLES20.GL_TEXTURE4);
         GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, previousTexId);

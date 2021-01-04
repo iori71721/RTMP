@@ -86,6 +86,29 @@
                     android:layout_height="wrap_content"
                     android:text="亮度-" />
 
+                <Button
+                    android:id="@+id/button_beautiful_on"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="美肌開" />
+
+                <Button
+                    android:id="@+id/button_beautiful_off"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="美肌關" />
+
+                <Button
+                    android:id="@+id/button_beautiful_inc"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="美肌+" />
+
+                <Button
+                    android:id="@+id/button_beautiful_dec"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="美肌-" />
             </LinearLayout>
 
         </ScrollView>
