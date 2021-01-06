@@ -1,5 +1,7 @@
 package com.example.test.rmtp.filter;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -11,22 +13,34 @@ import com.example.test.rmtp.BaseRtmpActivity;
 import com.example.test.rmtp.R;
 import com.example.test.rmtp.filterReuse.BeautifulFaceFilterReuse;
 import com.example.test.rmtp.filterReuse.BrightnessFilterReuse;
+import com.example.test.rmtp.filterReuse.CustomGPUImageChromaKeyBlendFilterReuse;
 import com.example.test.rmtp.filterReuse.NonFilterReuse;
 import com.example.test.rmtp.filterReuse.record.ReuseBeautifulFaceFilterRecord;
 import com.example.test.rmtp.filterReuse.record.ReuseBrightnessFilterRecord;
+import com.example.test.rmtp.filterReuse.record.ReuseCustomGPUImageChromaKeyBlendFilterRecord;
 import com.example.test.rmtp.filterReuse.record.ReuseNonUpdateFilterRecord;
 
 public class HorizontalFlipActivity extends BaseRtmpActivity {
     private Button button_HorizontalFlip_on;
     private Button button_HorizontalFlip_off;
+
+
     private Button button_Brightness_on;
     private Button button_Brightness_off;
     private Button button_Brightness_inc;
     private Button button_Brightness_dec;
+
+
     private Button button_beautiful_on;
     private Button button_beautiful_off;
     private Button button_beautiful_inc;
     private Button button_beautiful_dec;
+
+
+    private Button button_green_on;
+    private Button button_green_off;
+    private Button button_green_change;
+    private int greenChangeCount;
 
     @Override
     protected int generateContentViewID() {
@@ -47,6 +61,9 @@ public class HorizontalFlipActivity extends BaseRtmpActivity {
         button_beautiful_off=findViewById(R.id.button_beautiful_off);
         button_beautiful_inc=findViewById(R.id.button_beautiful_inc);
         button_beautiful_dec=findViewById(R.id.button_beautiful_dec);
+        button_green_on=findViewById(R.id.button_green_on);
+        button_green_off=findViewById(R.id.button_green_off);
+        button_green_change=findViewById(R.id.button_green_change);
 
         button_HorizontalFlip_on.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -118,9 +135,53 @@ public class HorizontalFlipActivity extends BaseRtmpActivity {
             }
         });
 
+        initGreenLayout();
+
+        addFilters();
+    }
+
+    private void addFilters(){
         addHorizontalFlipFilter();
         addBrightnessFilter();
         addBeautifulFilter();
+        addGreenScreenFilter();
+    }
+
+    private void initGreenLayout(){
+        button_green_on.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                filterReusedManager.visibleFilter(FilterName.GREEN_SCREEN,true);
+            }
+        });
+
+        button_green_off.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                filterReusedManager.visibleFilter(FilterName.GREEN_SCREEN,false);
+            }
+        });
+
+        button_green_change.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                greenChangeCount++;
+                changeGreenBitmap(greenChangeCount);
+            }
+        });
+    }
+
+    private void changeGreenBitmap(int greenChangeCount){
+        if(filterReusedManager.fetchFilter(FilterName.GREEN_SCREEN) != null) {
+            Bitmap changeBitmap;
+            if (greenChangeCount % 2 == 0) {
+                changeBitmap=BitmapFactory.decodeResource(getResources(),R.drawable.start_stream);
+            }else{
+                changeBitmap=BitmapFactory.decodeResource(getResources(),R.drawable.password);
+            }
+            CustomGPUImageChromaKeyBlendFilterReuse filterReuse=(CustomGPUImageChromaKeyBlendFilterReuse) filterReusedManager.fetchFilter(FilterName.GREEN_SCREEN);
+            filterReuse.setReplaceBitmap(changeBitmap);
+        }
     }
 
     private void changBeautiful(float beautiful){
@@ -158,6 +219,15 @@ public class HorizontalFlipActivity extends BaseRtmpActivity {
         }
     }
 
+    private void addGreenScreenFilter(){
+        if(filterReusedManager.fetchFilter(FilterName.GREEN_SCREEN) == null){
+            CustomGPUImageChromaKeyBlendFilterReuse customGPUImageChromaKeyBlendFilterReuse
+                    =new CustomGPUImageChromaKeyBlendFilterReuse(new ReuseCustomGPUImageChromaKeyBlendFilterRecord());
+            customGPUImageChromaKeyBlendFilterReuse.setReplaceBitmap(BitmapFactory.decodeResource(getResources(),R.drawable.user));
+            filterReusedManager.addFilter(customGPUImageChromaKeyBlendFilterReuse,FilterName.GREEN_SCREEN);
+        }
+    }
+
     private void addBeautifulFilter(){
         if(filterReusedManager.fetchFilter(FilterName.BEAUTIFUL)==null){
             BeautifulFaceFilterReuse addFilter=new BeautifulFaceFilterReuse(new ReuseBeautifulFaceFilterRecord());
@@ -173,5 +243,6 @@ public class HorizontalFlipActivity extends BaseRtmpActivity {
         private static final String HORIZONTAL_FLIP ="HORIZONTAL_FLIP";
         private static final String BRIGHTNESS="BRIGHTNESS";
         private static final String BEAUTIFUL="BEAUTIFUL";
+        private static final String GREEN_SCREEN ="GREEN_SCREEN";
     }
 }

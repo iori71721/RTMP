@@ -11,7 +11,9 @@ public class BeautifulFaceFilterReuse extends BaseObjectFilterReuse<BeautifulFac
 
     public void setBeautyLevelValue(float beautyLevel) {
         beautyLevel=BeautifulFaceFilter.fixedBeautiful(beautyLevel);
-        getReusedFilter().setBeautyLevelValue(beautyLevel);
+        if(getReusedFilter() != null) {
+            getReusedFilter().setBeautyLevelValue(beautyLevel);
+        }
         getFilterRecord().setBeautiful(beautyLevel);
     }
 

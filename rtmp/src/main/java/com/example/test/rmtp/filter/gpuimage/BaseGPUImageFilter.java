@@ -53,6 +53,7 @@ public abstract class BaseGPUImageFilter extends BaseCustomFilterRender {
     }
 
     public void onInitialized() {
+        drawGpuImageFilter();
     }
 
     public void ifNeedInit() {
@@ -61,7 +62,6 @@ public abstract class BaseGPUImageFilter extends BaseCustomFilterRender {
 
     public final void destroy() {
         isInitialized = false;
-        GLES20.glDeleteProgram(glProgId);
         onDestroy();
     }
 
@@ -247,5 +247,11 @@ public abstract class BaseGPUImageFilter extends BaseCustomFilterRender {
     protected void drawCustomFilter() {
         onOutputSizeChanged(getWidth(),getHeight());
         onDraw();
+    }
+
+    @Override
+    public void release() {
+        destroy();
+        super.release();
     }
 }

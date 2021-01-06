@@ -109,6 +109,25 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="美肌-" />
+
+                <Button
+                    android:id="@+id/button_green_on"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="綠幕開" />
+
+                <Button
+                    android:id="@+id/button_green_off"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="綠幕關" />
+
+                <Button
+                    android:id="@+id/button_green_change"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="綠幕換圖" />
+
             </LinearLayout>
 
         </ScrollView>

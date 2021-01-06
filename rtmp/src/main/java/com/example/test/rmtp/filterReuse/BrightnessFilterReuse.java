@@ -28,7 +28,9 @@ public class BrightnessFilterReuse extends BaseObjectFilterReuse<BrightnessFilte
      * @param brightness Range should be between 0.1 - 2.0 with 0.0 being normal.
      */
     public void setBrightness(float brightness) {
-        getReusedFilter().setBrightness(brightness);
+        if(getReusedFilter() != null) {
+            getReusedFilter().setBrightness(brightness);
+        }
         getFilterRecord().setBrightness(brightness);
     }
 

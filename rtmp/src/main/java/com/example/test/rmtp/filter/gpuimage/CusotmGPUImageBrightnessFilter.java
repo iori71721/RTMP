@@ -26,12 +26,6 @@ public class CusotmGPUImageBrightnessFilter extends BaseGPUImageFilter{
     }
 
     @Override
-    public void onInitialized() {
-        super.onInitialized();
-        setBrightness(brightness);
-    }
-
-    @Override
     protected void drawGpuImageFilter() {
         setBrightness(brightness);
     }

@@ -29,12 +29,6 @@ public class BeautifulFaceFilter extends BaseGPUImageFilter {
     }
 
     @Override
-    public void onInitialized() {
-        super.onInitialized();
-        drawGpuImageFilter();
-    }
-
-    @Override
     protected void drawGpuImageFilter() {
         setBeautyLevel(beautyLevel);
     }

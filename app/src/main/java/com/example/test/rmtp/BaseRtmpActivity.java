@@ -195,6 +195,7 @@ public abstract class BaseRtmpActivity extends AppCompatActivity implements Conn
         fixedRotation=fetchCameraDisplayOrientation(this, usedCameraID,null);
         rtmpCamera1.startPreview(usedCameraFacing,preViewHeight,preViewWidth,fixedRotation);
         fetchCameraDisplayOrientation(this, usedCameraID,null);
+        reuseFilters();
     }
 
     @Override
