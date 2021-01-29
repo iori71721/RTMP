@@ -55,8 +55,6 @@ public abstract class BaseGPUImageTwoInputFilter extends BaseGPUImageFilter{
         }
         runOnDraw(new Runnable() {
             public void run() {
-//                force setup to change bitmap
-                filterSourceTexture2=OpenGlUtils.NO_TEXTURE;
                 if (filterSourceTexture2 == OpenGlUtils.NO_TEXTURE) {
                     if (bitmap == null || bitmap.isRecycled()) {
                         return;
@@ -79,12 +77,16 @@ public abstract class BaseGPUImageTwoInputFilter extends BaseGPUImageFilter{
         }
     }
 
-    public void onDestroy() {
-        super.onDestroy();
+    private void resetFilterSourceTexture2(){
         GLES20.glDeleteTextures(1, new int[]{
                 filterSourceTexture2
         }, 0);
         filterSourceTexture2 = OpenGlUtils.NO_TEXTURE;
+    }
+
+    public void onDestroy() {
+        super.onDestroy();
+        resetFilterSourceTexture2();
     }
 
     @Override

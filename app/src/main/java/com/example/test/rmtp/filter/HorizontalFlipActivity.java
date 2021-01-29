@@ -165,21 +165,22 @@ public class HorizontalFlipActivity extends BaseRtmpActivity {
         button_green_change.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                greenChangeCount++;
                 changeGreenBitmap(greenChangeCount);
             }
         });
     }
 
-    private void changeGreenBitmap(int greenChangeCount){
-        if(filterReusedManager.fetchFilter(FilterName.GREEN_SCREEN) != null) {
+    private void changeGreenBitmap(int greenChangeCount) {
+        if (filterReusedManager.fetchFilter(FilterName.GREEN_SCREEN) != null) {
+            CustomGPUImageChromaKeyBlendFilterReuse filterReuse = (CustomGPUImageChromaKeyBlendFilterReuse) filterReusedManager.fetchFilter(FilterName.GREEN_SCREEN);
+            greenChangeCount++;
+            this.greenChangeCount = greenChangeCount;
             Bitmap changeBitmap;
             if (greenChangeCount % 2 == 0) {
-                changeBitmap=BitmapFactory.decodeResource(getResources(),R.drawable.start_stream);
-            }else{
-                changeBitmap=BitmapFactory.decodeResource(getResources(),R.drawable.password);
+                changeBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.start_stream);
+            } else {
+                changeBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.password);
             }
-            CustomGPUImageChromaKeyBlendFilterReuse filterReuse=(CustomGPUImageChromaKeyBlendFilterReuse) filterReusedManager.fetchFilter(FilterName.GREEN_SCREEN);
             filterReuse.setReplaceBitmap(changeBitmap);
         }
     }
