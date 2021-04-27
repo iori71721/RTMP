@@ -47,7 +47,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/horizontalFlipFilter"
-                android:text="水平翻轉filter+亮度+美肌+綠幕"/>
+                android:text="水平翻轉filter+亮度+美肌+綠幕+柔光"/>
 
         </LinearLayout>
 

@@ -11,6 +11,7 @@ import androidx.annotation.Nullable;
 
 import com.example.test.rmtp.BaseRtmpActivity;
 import com.example.test.rmtp.R;
+import com.example.test.rmtp.filter.gpuimage.CustomGPUImageSoftLightFilter;
 import com.example.test.rmtp.filterReuse.BeautifulFaceFilterReuse;
 import com.example.test.rmtp.filterReuse.BrightnessFilterReuse;
 import com.example.test.rmtp.filterReuse.CustomGPUImageChromaKeyBlendFilterReuse;
@@ -42,6 +43,11 @@ public class HorizontalFlipActivity extends BaseRtmpActivity {
     private Button button_green_change;
     private int greenChangeCount;
 
+
+    private Button button_soft_light;
+    private boolean enableSoftLight;
+
+
     @Override
     protected int generateContentViewID() {
         return R.layout.horizontal_flip_activity;
@@ -64,6 +70,7 @@ public class HorizontalFlipActivity extends BaseRtmpActivity {
         button_green_on=findViewById(R.id.button_green_on);
         button_green_off=findViewById(R.id.button_green_off);
         button_green_change=findViewById(R.id.button_green_change);
+        button_soft_light=findViewById(R.id.button_soft_light);
 
         button_HorizontalFlip_on.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -135,9 +142,28 @@ public class HorizontalFlipActivity extends BaseRtmpActivity {
             }
         });
 
-        initGreenLayout();
+        button_soft_light.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                enableSoftLight=changeSoftLight(enableSoftLight);
+            }
+        });
 
+        initGreenLayout();
+        initSoftLightButton(enableSoftLight);
         addFilters();
+    }
+
+    private boolean changeSoftLight(boolean enableSoftLight) {
+        enableSoftLight=!enableSoftLight;
+        filterReusedManager.visibleFilter(FilterName.SOFT_LIGHT,enableSoftLight);
+        initSoftLightButton(enableSoftLight);
+        return enableSoftLight;
+    }
+
+    private void initSoftLightButton(boolean enableSoftLight) {
+        String text="柔光 "+(enableSoftLight?"ON":"OFF");
+        button_soft_light.setText(text);
     }
 
     private void addFilters(){
@@ -145,6 +171,15 @@ public class HorizontalFlipActivity extends BaseRtmpActivity {
         addBrightnessFilter();
         addBeautifulFilter();
         addGreenScreenFilter();
+        addSoftLighter();
+    }
+
+    private void addSoftLighter() {
+        if(filterReusedManager.fetchFilter(FilterName.SOFT_LIGHT) == null ){
+            NonFilterReuse<CustomGPUImageSoftLightFilter> filterNonFilterReuse=new NonFilterReuse<>(new ReuseNonUpdateFilterRecord(),CustomGPUImageSoftLightFilter.class);
+            filterReusedManager.addFilter(filterNonFilterReuse,FilterName.SOFT_LIGHT);
+            filterReusedManager.visibleFilter(FilterName.SOFT_LIGHT,false);
+        }
     }
 
     private void initGreenLayout(){
@@ -226,6 +261,7 @@ public class HorizontalFlipActivity extends BaseRtmpActivity {
                     =new CustomGPUImageChromaKeyBlendFilterReuse(new ReuseCustomGPUImageChromaKeyBlendFilterRecord());
             customGPUImageChromaKeyBlendFilterReuse.setReplaceBitmap(BitmapFactory.decodeResource(getResources(),R.drawable.user));
             filterReusedManager.addFilter(customGPUImageChromaKeyBlendFilterReuse,FilterName.GREEN_SCREEN);
+            filterReusedManager.visibleFilter(FilterName.GREEN_SCREEN,false);
         }
     }
 
@@ -233,6 +269,7 @@ public class HorizontalFlipActivity extends BaseRtmpActivity {
         if(filterReusedManager.fetchFilter(FilterName.BEAUTIFUL)==null){
             BeautifulFaceFilterReuse addFilter=new BeautifulFaceFilterReuse(new ReuseBeautifulFaceFilterRecord());
             filterReusedManager.addFilter(addFilter,FilterName.BEAUTIFUL);
+            filterReusedManager.visibleFilter(FilterName.BEAUTIFUL,false);
         }
     }
 
@@ -245,5 +282,6 @@ public class HorizontalFlipActivity extends BaseRtmpActivity {
         private static final String BRIGHTNESS="BRIGHTNESS";
         private static final String BEAUTIFUL="BEAUTIFUL";
         private static final String GREEN_SCREEN ="GREEN_SCREEN";
+        private static final String SOFT_LIGHT="SOFT_LIGHT";
     }
 }
