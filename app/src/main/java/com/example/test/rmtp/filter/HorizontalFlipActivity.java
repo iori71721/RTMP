@@ -16,6 +16,7 @@ import com.example.test.rmtp.filterReuse.BeautifulFaceFilterReuse;
 import com.example.test.rmtp.filterReuse.BrightnessFilterReuse;
 import com.example.test.rmtp.filterReuse.CustomGPUImageChromaKeyBlendFilterReuse;
 import com.example.test.rmtp.filterReuse.NonFilterReuse;
+import com.example.test.rmtp.filterReuse.VerticalExtensionFilterReuse;
 import com.example.test.rmtp.filterReuse.record.ReuseBeautifulFaceFilterRecord;
 import com.example.test.rmtp.filterReuse.record.ReuseBrightnessFilterRecord;
 import com.example.test.rmtp.filterReuse.record.ReuseCustomGPUImageChromaKeyBlendFilterRecord;
@@ -47,6 +48,9 @@ public class HorizontalFlipActivity extends BaseRtmpActivity {
     private Button button_soft_light;
     private boolean enableSoftLight;
 
+    private Button verticalExtensionInc;
+    private Button verticalExtensionDec;
+
 
     @Override
     protected int generateContentViewID() {
@@ -71,6 +75,8 @@ public class HorizontalFlipActivity extends BaseRtmpActivity {
         button_green_off=findViewById(R.id.button_green_off);
         button_green_change=findViewById(R.id.button_green_change);
         button_soft_light=findViewById(R.id.button_soft_light);
+        verticalExtensionInc=findViewById(R.id.verticalExtensionInc);
+        verticalExtensionDec=findViewById(R.id.verticalExtensionDec);
 
         button_HorizontalFlip_on.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -149,6 +155,23 @@ public class HorizontalFlipActivity extends BaseRtmpActivity {
             }
         });
 
+
+        verticalExtensionInc.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                VerticalExtensionFilterReuse filterReuse=(VerticalExtensionFilterReuse)filterReusedManager.fetchFilter(FilterName.VERTICAL_EXTENSION);
+                filterReuse.getReusedFilter().incExtension();
+            }
+        });
+
+        verticalExtensionDec.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                VerticalExtensionFilterReuse filterReuse=(VerticalExtensionFilterReuse)filterReusedManager.fetchFilter(FilterName.VERTICAL_EXTENSION);
+                filterReuse.getReusedFilter().decExtension();
+            }
+        });
+
         initGreenLayout();
         initSoftLightButton(enableSoftLight);
         addFilters();
@@ -172,11 +195,19 @@ public class HorizontalFlipActivity extends BaseRtmpActivity {
         addBeautifulFilter();
         addGreenScreenFilter();
         addSoftLighter();
+        addVerticalExtensionFilter();
+    }
+
+    private void addVerticalExtensionFilter() {
+        if(filterReusedManager.fetchFilter(FilterName.VERTICAL_EXTENSION) == null ){
+            VerticalExtensionFilterReuse filterNonFilterReuse=new VerticalExtensionFilterReuse();
+            filterReusedManager.addFilter(filterNonFilterReuse,FilterName.VERTICAL_EXTENSION);
+        }
     }
 
     private void addSoftLighter() {
         if(filterReusedManager.fetchFilter(FilterName.SOFT_LIGHT) == null ){
-            NonFilterReuse<CustomGPUImageSoftLightFilter> filterNonFilterReuse=new NonFilterReuse<>(new ReuseNonUpdateFilterRecord(),CustomGPUImageSoftLightFilter.class);
+            NonFilterReuse<CustomGPUImageSoftLightFilter,ReuseNonUpdateFilterRecord> filterNonFilterReuse=new NonFilterReuse<>(new ReuseNonUpdateFilterRecord(),CustomGPUImageSoftLightFilter.class);
             filterReusedManager.addFilter(filterNonFilterReuse,FilterName.SOFT_LIGHT);
             filterReusedManager.visibleFilter(FilterName.SOFT_LIGHT,false);
         }
@@ -242,7 +273,7 @@ public class HorizontalFlipActivity extends BaseRtmpActivity {
 
     private void addHorizontalFlipFilter(){
         if(filterReusedManager.fetchFilter(FilterName.HORIZONTAL_FLIP)==null){
-            NonFilterReuse<HorizontalFlipFilter> addFilter=new NonFilterReuse<>(new ReuseNonUpdateFilterRecord(),HorizontalFlipFilter.class);
+            NonFilterReuse<HorizontalFlipFilter,ReuseNonUpdateFilterRecord> addFilter=new NonFilterReuse<>(new ReuseNonUpdateFilterRecord(),HorizontalFlipFilter.class);
             filterReusedManager.addFilter(addFilter,FilterName.HORIZONTAL_FLIP);
             enableHorizontalFlip(false);
         }
@@ -283,5 +314,6 @@ public class HorizontalFlipActivity extends BaseRtmpActivity {
         private static final String BEAUTIFUL="BEAUTIFUL";
         private static final String GREEN_SCREEN ="GREEN_SCREEN";
         private static final String SOFT_LIGHT="SOFT_LIGHT";
+        private static final String VERTICAL_EXTENSION ="VERTICAL_EXTENSION";
     }
 }

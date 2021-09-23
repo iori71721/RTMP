@@ -103,4 +103,38 @@ public abstract class BaseCustomFilterRender extends BaseFilterRender {
     public void release() {
         GLES20.glDeleteProgram(program);
     }
+
+    protected int getSquareVertexDataCount(){
+        return 4;
+    }
+
+    /**
+     * ref {@link BaseCustomFilterRender#baseDrawFilter()}
+     */
+    protected void reloadVertex(){
+        squareVertex = ByteBuffer.allocateDirect(squareVertexDataFilter.length * FLOAT_SIZE_BYTES)
+                .order(ByteOrder.nativeOrder())
+                .asFloatBuffer();
+        squareVertex.put(squareVertexDataFilter).position(0);
+
+        squareVertex.position(SQUARE_VERTEX_DATA_POS_OFFSET);
+        GLES20.glVertexAttribPointer(aPositionHandle, 3, GLES20.GL_FLOAT, false,
+                SQUARE_VERTEX_DATA_STRIDE_BYTES, squareVertex);
+        GLES20.glEnableVertexAttribArray(aPositionHandle);
+    }
+
+    @Override
+    /**
+     * ref super
+     */
+    public void draw() {
+        GlUtil.checkGlError("drawFilter start");
+        GLES20.glBindFramebuffer(GLES20.GL_FRAMEBUFFER, getRenderHandler().getFboId()[0]);
+        GLES20.glViewport(0, 0, getWidth(), getHeight());
+        drawFilter();
+        reloadVertex();
+        GLES20.glDrawArrays(GLES20.GL_TRIANGLE_STRIP, 0, getSquareVertexDataCount());
+        GLES20.glBindFramebuffer(GLES20.GL_FRAMEBUFFER, 0);
+        GlUtil.checkGlError("drawFilter end");
+    }
 }

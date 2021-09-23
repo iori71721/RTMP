@@ -134,6 +134,18 @@
                     android:layout_height="wrap_content"
                     android:text="柔光" />
 
+                <Button
+                    android:id="@+id/verticalExtensionInc"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="垂直延伸" />
+
+                <Button
+                    android:id="@+id/verticalExtensionDec"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="垂直縮小" />
+
             </LinearLayout>
 
         </ScrollView>

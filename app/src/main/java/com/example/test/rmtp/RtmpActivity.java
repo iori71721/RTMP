@@ -314,7 +314,7 @@ public class RtmpActivity extends AppCompatActivity implements ConnectCheckerRtm
 //        cameraRender.setScale(50f,33.3f);
         cameraRender.setScale(30f,20f);
         cameraRender.setPosition(0,0);
-        NonFilterReuse<SurfaceFilterRender> cameraFilterReuse=new NonFilterReuse<>(new ReuseNonUpdateFilterRecord(),SurfaceFilterRender.class);
+        NonFilterReuse<SurfaceFilterRender,ReuseNonUpdateFilterRecord> cameraFilterReuse=new NonFilterReuse<>(new ReuseNonUpdateFilterRecord(),SurfaceFilterRender.class);
         filterReusedManager.addFilter(cameraFilterReuse,FilterName.CAMERA_SURFACE);
     }
 
@@ -526,7 +526,7 @@ public class RtmpActivity extends AppCompatActivity implements ConnectCheckerRtm
     private void addSnow(View v){
         if(filterReusedManager.fetchFilter(FilterName.ADD_SNOW) == null){
             ReuseNonUpdateFilterRecord addRecord=new ReuseNonUpdateFilterRecord();
-            NonFilterReuse<SnowFilterRender> addFilterReuse=new NonFilterReuse<SnowFilterRender>(addRecord,SnowFilterRender.class);
+            NonFilterReuse<SnowFilterRender,ReuseNonUpdateFilterRecord> addFilterReuse=new NonFilterReuse<>(addRecord,SnowFilterRender.class);
             filterReusedManager.addFilter(addFilterReuse,FilterName.ADD_SNOW);
         }
     }
